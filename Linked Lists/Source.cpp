@@ -1,5 +1,5 @@
-// Attached: HW_4-1(ab)
-// File: HW_4-1ab.pdf
+// Attached: HW_4-2
+// File: HW_4-2.pdf
 // =============================================================================
 //
 // Programmer: Alejandro Fonseca
@@ -7,48 +7,36 @@
 // Instructor: Med Mogasemi
 //
 // =============================================================================
-// Program: Write a program that creates a linked list of Dogs
+// Program: LinkedList
 // =============================================================================
 // Description:
-// creates a linked list of dogs, allowing the user to add dogs by 
-// entering their ID and name, display the current list, and delete a dog by its ID. 
+// creates a linked list of vehicle objects, where each vehicle has an ID number 
+// and a model name. It allows the user to add vehicles to the list, display the entire list, and search for a specific vehicle by its ID. 
 // =============================================================================
 // =============================================================================
 
 #include <iostream>
 #include <string>
-#include "Dog.h"
+#include "Vehicle.h"
 
 // Function prototypes
-void insertDog(Dog*& head, int id, const std::string& name);
-void displayList(Dog* head);
-void deleteDog(Dog*& head, int id);
+void insertVehicle(Vehicle*& head);
+void displayVehicles(Vehicle* head);
+void searchList(Vehicle* head, int id);
 
 int main() {
-    Dog* head = nullptr; // Start with an empty list (head is null)
-    int id; // Variable to store the ID of the dog
-    std::string name; // Variable to store the name of the dog
-    char anotherDog; // Variable to store the user's choice to enter another dog or not
-    
-    // Loop to create a linked list of at least 3 dogs
-    while (true) {
-        // Ask the user to enter the dog's ID
-        std::cout << "Enter ID: ";
-        std::cin >> id;
-        std::cin.ignore(); // Ignore the newline character left in the input buffer
-        
-        // Ask the user to enter the dog's name
-        std::cout << "Name: ";
-        std::getline(std::cin, name);
-        
-        // Call the function to insert the dog into the list
-        insertDog(head, id, name);
-        
-        // Ask the user if they want to enter another dog
-        std::cout << "Enter another dog (Y or N)? ";
-        std::cin >> anotherDog;
-        if (anotherDog != 'Y' && anotherDog != 'y') {
-            break; // Exit the loop if the user does not want to enter another dog
+    Vehicle* head = nullptr; // Start with an empty list (head is null)
+    char anotherVehicle;     // Variable to store the user's choice to enter another vehicle or not
+
+    // Loop to create a linked list of at least 5 vehicles
+    for (int i = 0; i < 5; ++i) {
+        insertVehicle(head); // Call the function to insert the vehicle into the list
+        if (i < 4) { // Only prompt for additional vehicles if not yet inserted 5
+            std::cout << "Enter another vehicle (Y or N)? ";
+            std::cin >> anotherVehicle;
+            if (anotherVehicle != 'Y' && anotherVehicle != 'y') {
+                break; // Exit the loop if the user does not want to enter another vehicle
+            }
         }
     }
 
@@ -62,102 +50,98 @@ int main() {
     if (displayChoice == 'Y' || displayChoice == 'y') {
         // Clear the screen again before displaying the list
         system("clear"); // Use "cls" on Windows
-        displayList(head); // Call the function to display the list
+        displayVehicles(head); // Call the function to display the list
     }
 
-    // Ask the user for the ID of the dog to be deleted
-    std::cout << "Enter an ID of a dog to be deleted: ";
-    std::cin >> id;
-    deleteDog(head, id); // Call the function to delete the dog
+    // Clear the screen
+    system("clear"); // Use "cls" on Windows
+
+    // Prompt the user for the ID of the vehicle to be searched
+    int searchId;
+    std::cout << "Enter the ID of a vehicle to be found: ";
+    std::cin >> searchId;
+    searchList(head, searchId); // Call the function to search for the vehicle
 
     return 0;
 }
 
-// Function to insert a new dog into the list
-void insertDog(Dog*& head, int id, const std::string& name) {
-    // Create a new Dog object
-    Dog* newDog = new Dog;
-    newDog->id = id; // Set the ID of the new dog
-    newDog->name = name; // Set the name of the new dog
+// Function to insert a new vehicle into the list
+void insertVehicle(Vehicle*& head) {
+    // Create a new Vehicle object
+    Vehicle* newVehicle = new Vehicle;
     
-    // Make the new dog point to the current head of the list
-    newDog->next = head;
-    
-    // Update the head to point to the new dog
-    head = newDog;
+    // Ask the user to enter the vehicle's ID
+    std::cout << "ID: ";
+    std::cin >> newVehicle->id;
+    std::cin.ignore(); // Ignore the newline character left in the input buffer
+
+    // Ask the user to enter the vehicle's model
+    std::cout << "Model: ";
+    std::getline(std::cin, newVehicle->model);
+
+    // Make the new vehicle point to the current head of the list
+    newVehicle->next = head;
+
+    // Update the head to point to the new vehicle
+    head = newVehicle;
 }
 
-// Function to display the list of dogs
-void displayList(Dog* head) {
+// Function to display the list of vehicles
+void displayVehicles(Vehicle* head) {
     std::cout << "Here is the list:\n";
-    Dog* current = head; // Start from the head of the list
+    Vehicle* current = head; // Start from the head of the list
     while (current != nullptr) { // Loop until the end of the list
-        std::cout << "ID: " << current->id << "\n"; // Print the ID of the current dog
-        std::cout << "Name: " << current->name << "\n"; // Print the name of the current dog
-        current = current->next; // Move to the next dog in the list
+        std::cout << "ID: " << current->id << "\n"; // Print the ID of the current vehicle
+        std::cout << "Model: " << current->model << "\n"; // Print the model of the current vehicle
+        current = current->next; // Move to the next vehicle in the list
     }
 }
 
-// Function to delete a dog from the list
-void deleteDog(Dog*& head, int id) {
-    Dog* current = head; // Start from the head of the list
-    Dog* previous = nullptr; // To keep track of the previous node
-    
-    // Loop to find the dog with the given ID
-    while (current != nullptr && current->id != id) {
-        previous = current; // Move the previous pointer to the current dog
-        current = current->next; // Move the current pointer to the next dog
-    }
-    
-    if (current == nullptr) {
-        // If the ID is not found in the list
-        std::cout << id << " is not in the list.\n";
-    } else {
-        // If the ID is found, remove the dog from the list
-        if (previous == nullptr) {
-            head = head->next; // Update the head if the dog to be deleted is the first dog
-        } else {
-            previous->next = current->next; // Bypass the current dog
+// Function to search for a vehicle by ID
+void searchList(Vehicle* head, int id) {
+    Vehicle* current = head; // Start from the head of the list
+    while (current != nullptr) { // Loop until the end of the list
+        if (current->id == id) { // If the ID matches
+            std::cout << "We found the vehicle!\n";
+            std::cout << "ID: " << current->id << "\n"; // Print the ID of the found vehicle
+            std::cout << "Model: " << current->model << "\n"; // Print the model of the found vehicle
+            return;
         }
-        delete current; // Free the memory of the deleted dog
-        std::cout << "The dog has been deleted.\n";
+        current = current->next; // Move to the next vehicle in the list
     }
-    
-    // Display the list after deletion
-    std::cout << "Here is the list after the delete:\n";
-    displayList(head);
+    std::cout << id << " is not in the list.\n"; // If the ID is not found
 }
 
-
+// ===========================================================================
 // OUTPUT
 // Enter ID: 100
-// Name: Bud
-// Enter another dog (Y or N)? Y
+// Model: Jeep
+// Enter another vehicle (Y or N)? y
 // Enter ID: 101
-// Name: Big Boy
-// Enter another dog (Y or N)? Y
+// Model: Toyota
+// Enter another vehicle (Y or N)? y
 // Enter ID: 102
-// Name: Spot
-// Enter another dog (Y or N)? Y
+// Model: Honda
+// Enter another vehicle (Y or N)? y
 // Enter ID: 103
-// Name: Red
-// Enter another dog (Y or N)? N
-// Display the list (Y/N)? Y
+// Model: Ford
+// Enter another vehicle (Y or N)? y
+// Enter ID: 104
+// Model: Fiat
+// Enter another vehicle (Y or N)? n
+// Display the list (Y/N)? y
 // Here is the list:
+// ID: 104
+// Model: Fiat
 // ID: 103
-// Name: Red
+// Model: Ford
 // ID: 102
-// Name: Spot
+// Model: Honda
 // ID: 101
-// Name: Big Boy
+// Model: Toyota
 // ID: 100
-// Name: Bud
-// Enter an ID of a dog to be deleted: 101
-// The dog has been deleted.
-// Here is the list after the delete:
-// ID: 103
-// Name: Red
-// ID: 102
-// Name: Spot
-// ID: 100
-// Name: Bud
+// Model: Jeep
+// Enter the ID of a vehicle to be found: 104
+// We found the vehicle!
+// ID: 104
+// Model: Fiat
