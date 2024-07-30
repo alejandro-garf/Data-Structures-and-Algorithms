@@ -30,4 +30,31 @@ class Node:
                 current = current.next_node
 
             return current
+        
+    def add(self, data):
+        """ 
+        Adds new nodes containing data at the head of the list.
+        Takes 0(1) - constant time
+        """
+        new_node = Node(data)
+        new_node.next_node = self.head
+        self.head = new_node
 
+    def __repr__(self):
+        """
+        Take a string representation of the list.
+        Takes 0(1) - constant time
+        """
+        nodes = []
+        current = self.head
+
+        while current:
+            if current is self.head:
+                nodes.append("[Head: %s]" % current.data)
+            elif current is None:
+                nodes.append("[Tail: %s]" % current.data)
+            else:
+                nodes.append("[%s]" % current.data)
+            
+            current = current.next_node
+        return '->' .join(nodes)
