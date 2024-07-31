@@ -40,6 +40,21 @@ class Node:
         new_node.next_node = self.head
         self.head = new_node
 
+    def search(self, key):
+        """
+        Search for the first node that contains the data that matches the key. 
+        Returns the Node or None. Take O(n) or constant time.
+        """
+        current = self.head
+
+        while current:
+            if current.data == key:
+                return current
+            else:
+                current = current.next_node
+            return None
+        
+
     def __repr__(self):
         """
         Take a string representation of the list.
