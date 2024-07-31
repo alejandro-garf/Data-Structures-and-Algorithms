@@ -8,6 +8,13 @@ public:
     Node* Next;
 };
 
+void printList(Node*n){
+    while (n!=NULL){
+        cout << n->value << endl;
+        n = n->Next;
+    }
+}
+
 int main()
 {
     Node* head = new Node();
@@ -19,6 +26,9 @@ int main()
     first->value = 2;
     first->Next = second;
     second->value = 3;
+    second->Next = NULL;
+
+    printList(head);
 
 
 return 0;
