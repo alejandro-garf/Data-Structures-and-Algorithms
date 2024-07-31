@@ -52,7 +52,32 @@ class Node:
                 return current
             else:
                 current = current.next_node
-            return None
+        return None
+    
+    def insert(self, data, index):
+        if index == 0:
+            self.add(data)
+        
+        if index > 0:
+             """
+             Inserts a new node containing data at index position. Insertion takes 0(1) constant time but 
+             finding node at insert position take 0(n)  linear time.
+             """
+        
+             new = Node(data)
+
+             position = index
+             current = self.head
+
+             while position > 1:
+                 current = node.next_node
+                 position -= 1
+
+            prev_node = current
+            next_node = current.next_node
+        
+            prev_node.next_node = new
+            new.next_node = next_node
         
 
     def __repr__(self):
