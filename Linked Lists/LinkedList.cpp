@@ -15,7 +15,9 @@ int main()
     Node* second = new Node();
 
     head->value = 1;
+    head->Next = first;
     first->value = 2;
+    first->Next = second;
     second->value = 3;
 
 
